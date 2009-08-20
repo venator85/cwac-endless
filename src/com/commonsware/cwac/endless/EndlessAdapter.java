@@ -23,6 +23,7 @@ import android.widget.ListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import com.commonsware.cwac.adapter.AdapterWrapper;
 
 /**
  * Adapter that assists another adapter in appearing endless.
@@ -53,13 +54,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * know you are out of data, plus return false from that final
  * call to appendInBackground().
  */
-abstract public class EndlessAdapter extends BaseAdapter {
+abstract public class EndlessAdapter extends AdapterWrapper {
 	abstract protected View getPendingView(ViewGroup parent);
 	abstract protected void rebindPendingView(int position,
 																						View convertView);
 	abstract protected boolean appendInBackground();
 	
-	private ListAdapter wrapped=null;
 	private View pendingView=null;
 	private int pendingPosition=-1;
 	private AtomicBoolean keepOnAppending=new AtomicBoolean(true);
@@ -68,19 +68,7 @@ abstract public class EndlessAdapter extends BaseAdapter {
 		* Constructor wrapping a supplied ListAdapter
     */
 	public EndlessAdapter(ListAdapter wrapped) {
-		super();
-		
-		this.wrapped=wrapped;
-	}
-
-	/**
-		* Get the data item associated with the specified
-		* position in the data set.
-		* @param position Position of the item whose data we want
-    */
-	@Override
-	public Object getItem(int position) {
-		return(wrapped.getItem(position));
+		super(wrapped);
 	}
 
 	/**
@@ -90,48 +78,10 @@ abstract public class EndlessAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		if (keepOnAppending.get()) {
-			return(wrapped.getCount()+1);		// one more for "pending"
+			return(super.getCount()+1);		// one more for "pending"
 		}
 		
-		return(wrapped.getCount());
-	}
-
-	/**
-		* Returns the number of types of Views that will be
-		* created by getView().
-    */
-	@Override
-	public int getViewTypeCount() {
-		return(wrapped.getViewTypeCount());
-	}
-
-	/**
-		* Get the type of View that will be created by getView()
-		* for the specified item.
-		* @param position Position of the item whose data we want
-    */
-	@Override
-	public int getItemViewType(int position) {
-		return(wrapped.getItemViewType(position));
-	}
-
-	/**
-		* Are all items in this ListAdapter enabled? If yes it
-		* means all items are selectable and clickable.
-    */
-	@Override
-	public boolean areAllItemsEnabled() {
-		return(wrapped.areAllItemsEnabled());
-	}
-
-	/**
-		* Returns true if the item at the specified position is
-		* something selectable.
-		* @param position Position of the item whose data we want
-    */
-	@Override
-	public boolean isEnabled(int position) {
-		return(wrapped.isEnabled(position));
+		return(super.getCount());
 	}
 
 	/**
@@ -148,7 +98,7 @@ abstract public class EndlessAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView,
 											ViewGroup parent) {
-		if (position==wrapped.getCount() &&
+		if (position==super.getCount() &&
 				keepOnAppending.get()) {
 			pendingView=getPendingView(parent);
 			pendingPosition=position;
@@ -158,27 +108,9 @@ abstract public class EndlessAdapter extends BaseAdapter {
 			return(pendingView);
 		}
 		
-		return(wrapped.getView(position, convertView, parent));
+		return(super.getView(position, convertView, parent));
 	}
 
-	/**
-		* Get the row id associated with the specified position
-		* in the list.
-		* @param position Position of the item whose data we want
-    */
-	@Override
-	public long getItemId(int position) {
-		return(wrapped.getItemId(position));
-	}
-	
-	/**
-		* Returns the ListAdapter that is wrapped by the endless
-		* logic.
-    */
-	protected ListAdapter getWrappedAdapter() {
-		return(wrapped);
-	}
-	
 	/**
 	 * A background task that will be run when there is a need
 	 * to append more data. Mostly, this code delegates to the

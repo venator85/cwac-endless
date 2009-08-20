@@ -37,7 +37,10 @@ tuned!
 
 Dependencies
 ------------
-None at present.
+This project relies upon the [CWAC AdapterWrapper][adapter] project.
+A copy of compatible JARs can be found in the `libs/` directory
+of the project, though you are welcome to try newer ones, or
+ones that you have patched yourself.
 
 Version
 -------
@@ -66,3 +69,4 @@ join and ask them on the [cw-android Google Group][gg]. Be sure to
 indicate which CWAC module you have questions about.
 
 [gg]: http://groups.google.com/group/cw-android
+[adapter]: http://github.com/commonsguy/cwac-adapter/tree/master
