@@ -32,8 +32,72 @@ way to the bottom.
 
 Usage
 -----
-Full instructions for using this module are forthcoming. Stay
-tuned!
+To use `EndlessAdapter`, you need to create a subclass that
+will control the endlessness, specifying what `View` to use
+for the "loading" placeholder, and then updating that placeholder
+with an actual row once data has been loaded.
+
+`EndlessAdapter` assumes there is at least one more "batch" of
+data to be fetched. If everything was retrieved for your
+`ListAdapter` the first time out (e.g., the Web search returned
+only one "page" of results), do not wrap it in `EndlessAdapter`,
+and your users will not perceive a difference.
+
+### Constructors
+
+`EndlessAdapter` has one constructor, taking a `ListAdapter` as
+a parameter, representing the existing adapter to be made
+endless. Your `EndlessAdapter` subclass will need to override
+this constructor and chain upwards. For example, the DemoAdapter
+inside the demo project takes an `ArrayList<String>` as a
+constructor parameter and wraps it in a `ListAdapter` to supply
+to `EndlessAdapter`.
+
+### The Placeholder
+
+Your `EndlessAdapter` subclass needs to implement `getPendingView()`.
+This method works a bit like the traditional `getView()`, in that
+it receives a `ViewGroup` parameter and is supposed to return a
+row `View`. The major difference is that this method needs to
+return a row `View` that can serve as a placeholder, indicating
+to the user that you are fetching more data in the background
+(see below). However, this same row `View` must also be able to
+convert in-place to a regular row in your list.
+
+What sort of `View` you return, of course, is up to you. The
+demo application uses a row that, via a `FrameLayout`, has both
+a `TextView` (the normal row content) and an `ImageView` (placeholder)
+overlaying each other. In placeholder mode, only the `ImageView`
+is visible, and it is set to rotate via a `RotateAnimation`. In
+normal mode, only the `TextView` is visible.
+
+### The Loading
+
+Your `EndlessAdapter` subclass also needs to implement `appendInBackground()`.
+This method will be called from a background thread, and it needs
+to add more data to the `ListAdapter` you used in the constructor.
+While the demo application simply sleeps for two seconds, a real
+application might make a Web service call or otherwise load in
+more data.
+
+This method returns a `boolean`, which needs to be `true` if there
+is more data yet to be fetched, `false` otherwise. Hence, you need
+to make sure that, by the time you return, you know whether or
+not there is more data available.
+
+Since this method is called on a background thread, you do not
+need to fork your own thread. However, at the same time, do not
+try to update the UI directly.
+
+### The Rebinding
+
+Your `EndlessAdapter` also needs to implement `rebindPendingView()`.
+This method will be called, on the UI thread, after `appendInBackground()`
+completes its work. You will be passed the position in the
+`ListAdapter` that needs to go in this row, plus the original row
+`View` itself. Your mission is to make the row `View` look like
+any other row (e.g., replace the "loading" graphic with
+the actual row content).
 
 Dependencies
 ------------
