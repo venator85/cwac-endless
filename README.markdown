@@ -73,9 +73,10 @@ normal mode, only the `TextView` is visible.
 
 ### The Loading
 
-Your `EndlessAdapter` subclass also needs to implement `appendInBackground()`.
+Your `EndlessAdapter` subclass also needs to implement `cacheInBackground()`.
 This method will be called from a background thread, and it needs
-to add more data to the `ListAdapter` you used in the constructor.
+to download more data that will eventually be added to the `ListAdapter`
+you used in the constructor.
 While the demo application simply sleeps for two seconds, a real
 application might make a Web service call or otherwise load in
 more data.
@@ -88,6 +89,14 @@ not there is more data available.
 Since this method is called on a background thread, you do not
 need to fork your own thread. However, at the same time, do not
 try to update the UI directly.
+
+### The Attaching
+
+Your `EndlessAdapter` subclass also needs to implement `appendCachedData()`,
+which should take the data cached by `cacheInBackground()` and append
+it to the `ListAdapter` you used in the constructor. While
+`cacheInBackground()` is called on a background thread,
+`appendCachedData()` is called on the main application thread.
 
 ### The Rebinding
 
@@ -108,8 +117,8 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version 0.1 of this module, meaning it is pretty darn
-new.
+This is version 0.2 of this module, meaning it is pretty darn
+new, but is getting more exercise.
 
 Demo
 ----
