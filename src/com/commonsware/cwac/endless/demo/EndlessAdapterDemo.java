@@ -95,16 +95,18 @@ public class EndlessAdapterDemo extends ListActivity {
 			child.clearAnimation();
 		}
 		
-		protected boolean appendInBackground() {
+		protected boolean cacheInBackground() {
 			SystemClock.sleep(2000);				// pretend to do work
 			
+			return(getWrappedAdapter().getCount()<60);
+		}
+		
+		protected void appendCachedData() {
 			ArrayAdapter<String> a=(ArrayAdapter<String>)getWrappedAdapter();
 			
 			for (String item : items) {
 				a.add(item);
 			}
-			
-			return(a.getCount()<80);
 		}
 	}
 }

@@ -58,7 +58,8 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	abstract protected View getPendingView(ViewGroup parent);
 	abstract protected void rebindPendingView(int position,
 																						View convertView);
-	abstract protected boolean appendInBackground();
+	abstract protected boolean cacheInBackground();
+	abstract protected void appendCachedData();
 	
 	private View pendingView=null;
 	private int pendingPosition=-1;
@@ -100,17 +101,19 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 											ViewGroup parent) {
 		if (position==super.getCount() &&
 				keepOnAppending.get()) {
-			pendingView=getPendingView(parent);
-			pendingPosition=position;
-			
-			new AppendTask().execute();
+			if (pendingView==null) {
+				pendingView=getPendingView(parent);
+				pendingPosition=position;
+				
+				new AppendTask().execute();
+			}
 			
 			return(pendingView);
 		}
 		
 		return(super.getView(position, convertView, parent));
 	}
-
+	
 	/**
 	 * A background task that will be run when there is a need
 	 * to append more data. Mostly, this code delegates to the
@@ -120,13 +123,14 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	class AppendTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			keepOnAppending.set(appendInBackground());
+			keepOnAppending.set(cacheInBackground());
 			
 			return(null);
 		}
 		
 		@Override
 		protected void onPostExecute(Void unused) {
+			appendCachedData();
 			rebindPendingView(pendingPosition, pendingView);
 			pendingView=null;
 			pendingPosition=-1;
