@@ -30,6 +30,10 @@ additional data quickly and do not incur the bandwidth to
 download that data until and unless they scroll all the
 way to the bottom.
 
+Note that this has been tested with `ArrayAdapter` extensively
+but may not work with other adapter types, particularly
+`SimpleAdapter`.
+
 Usage
 -----
 To use `EndlessAdapter`, you need to create a subclass that
