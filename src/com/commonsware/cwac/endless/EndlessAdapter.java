@@ -110,6 +110,12 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 			
 			return(pendingView);
 		}
+		else if (convertView==pendingView) {
+			// if we're not at the bottom, and we're getting the
+			// pendingView back for recycling, skip the recycle
+			// process
+			return(super.getView(position, null, parent));
+		}
 		
 		return(super.getView(position, convertView, parent));
 	}

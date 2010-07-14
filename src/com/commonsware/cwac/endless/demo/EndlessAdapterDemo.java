@@ -96,7 +96,7 @@ public class EndlessAdapterDemo extends ListActivity {
 		}
 		
 		protected boolean cacheInBackground() {
-			SystemClock.sleep(2000);				// pretend to do work
+			SystemClock.sleep(10000);				// pretend to do work
 			
 			return(getWrappedAdapter().getCount()<60);
 		}

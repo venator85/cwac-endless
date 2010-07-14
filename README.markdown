@@ -121,7 +121,7 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version 0.2 of this module, meaning it is pretty darn
+This is version 0.2.1 of this module, meaning it is pretty darn
 new, but is getting more exercise.
 
 Demo
