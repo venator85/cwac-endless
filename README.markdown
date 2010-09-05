@@ -125,7 +125,7 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version 0.3 of this module, meaning it is pretty darn
+This is version 0.3.1 of this module, meaning it is pretty darn
 new, but is getting more exercise.
 
 Demo
@@ -151,6 +151,7 @@ indicate which CWAC module you have questions about.
 
 Release Notes
 -------------
+v0.3.1: fixed bug in manifest
 v0.3.0: converted to Android library project, added call to `notifyDataSetChanged()`
 
 [gg]: http://groups.google.com/group/cw-android
