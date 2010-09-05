@@ -63,22 +63,62 @@
          build steps are used.
     -->
     <setup />
-    
-    <target name="jar" depends="debug">
+
+    <target name="dist-dir">
+        <mkdir dir="dist"/>
+    </target>
+
+    <target name="dist-full" depends="dist-dir">
+        <delete file="dist/CWAC-EndlessAdapter-full.zip" />
+        <zip destfile="dist/CWAC-EndlessAdapter-full.zip">
+            <zipfileset
+                dir="."
+                prefix="CWAC-EndlessAdapter"
+                includes="**"
+                excludes="bin/**, dist/**, gen/**, .git/**, .gitignore, demo/bin/**, demo/gen/**"
+            />
+        </zip>
+    </target>
+
+    <target name="dist-lite" depends="dist-dir">
+        <delete file="dist/CWAC-EndlessAdapter-lite.zip" />
+        <zip destfile="dist/CWAC-EndlessAdapter-lite.zip">
+            <zipfileset
+                dir="."
+                prefix="CWAC-EndlessAdapter"
+                includes="**"
+                excludes="bin/**, dist/**, gen/**, .git/**, .gitignore, demo/**"
+            />
+        </zip>
+    </target>
+
+    <target name="jar" depends="compile">
         <jar
             destfile="bin/CWAC-EndlessAdapter.jar"
             basedir="bin/classes"
-            excludes="com/commonsware/cwac/bus/demo/**"
         />
     </target>
-    
-    <target name="clean">
-        <delete includeemptydirs="true">
-            <fileset dir="bin" includes="**/*"/>
-        </delete>
-        <delete includeemptydirs="true">
-            <fileset dir="gen" includes="**/*"/>
-        </delete>
+
+    <target name="dist-jar" depends="dist-dir, jar">
+        <delete file="dist/CWAC-EndlessAdapter-jar.zip" />
+        <copy file="bin/CWAC-EndlessAdapter.jar" todir="libs"/>
+        <mkdir dir="tmp" />
+        <mkdir dir="tmp/src" />
+        <zip destfile="dist/CWAC-EndlessAdapter-jar.zip">
+            <zipfileset
+                dir="."
+                prefix="CWAC-EndlessAdapter"
+                includes="**"
+                excludes="tmp/**, bin/**, dist/**, gen/**, .git/**, src/**, .gitignore, demo/**"
+            />
+            <zipfileset
+                dir="tmp"
+                prefix="CWAC-EndlessAdapter"
+                includes="src/"
+            />
+        </zip>
+        <delete dir="tmp"/>
+        <delete file="libs/CWAC-EndlessAdapter.jar" />
     </target>
 
 </project>

@@ -34,6 +34,10 @@ Note that this has been tested with `ArrayAdapter` extensively
 but may not work with other adapter types, particularly
 `SimpleAdapter`.
 
+This is available as a JAR file from the downloads area of this GitHub repo.
+The project itself is set up as an Android library project,
+in case you wish to use the source code in that fashion.
+
 Usage
 -----
 To use `EndlessAdapter`, you need to create a subclass that
@@ -121,12 +125,12 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version 0.2.1 of this module, meaning it is pretty darn
+This is version 0.3 of this module, meaning it is pretty darn
 new, but is getting more exercise.
 
 Demo
 ----
-In the `com.commonsware.cwac.endless.demo` package you will find
+In the `demo/` sub-project you will find
 a sample activity that demonstrates the use of `EndlessAdapter`.
 
 Note that when you build the JAR via `ant jar`, the sample
@@ -144,6 +148,10 @@ Questions
 If you have questions regarding the use of this code, please
 join and ask them on the [cw-android Google Group][gg]. Be sure to
 indicate which CWAC module you have questions about.
+
+Release Notes
+-------------
+v0.3.0: converted to Android library project, added call to `notifyDataSetChanged()`
 
 [gg]: http://groups.google.com/group/cw-android
 [adapter]: http://github.com/commonsguy/cwac-adapter/tree/master

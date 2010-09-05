@@ -140,6 +140,7 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 			rebindPendingView(pendingPosition, pendingView);
 			pendingView=null;
 			pendingPosition=-1;
+			notifyDataSetChanged();
 		}
 	}
 }
