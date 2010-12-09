@@ -18,10 +18,7 @@ package com.commonsware.cwac.endless;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import com.commonsware.cwac.adapter.AdapterWrapper;
 
@@ -60,7 +57,6 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	abstract protected void appendCachedData();
 	
 	private View pendingView=null;
-	private int pendingPosition=-1;
 	private AtomicBoolean keepOnAppending=new AtomicBoolean(true);
 
 	/**
@@ -122,7 +118,6 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 				keepOnAppending.get()) {
 			if (pendingView==null) {
 				pendingView=getPendingView(parent);
-				pendingPosition=position;
 
 				new AppendTask().execute();
 			}
@@ -151,7 +146,6 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 		protected void onPostExecute(Void unused) {
 			appendCachedData();
 			pendingView=null;
-			pendingPosition=-1;
 			notifyDataSetChanged();
 		}
 	}

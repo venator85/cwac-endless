@@ -15,18 +15,13 @@
 package com.commonsware.cwac.endless.demo;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import com.commonsware.cwac.endless.EndlessAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,6 +84,7 @@ public class EndlessAdapterDemo extends ListActivity {
 		}
 		
 		protected void appendCachedData() {
+			@SuppressWarnings("unchecked")
 			ArrayAdapter<String> a=(ArrayAdapter<String>)getWrappedAdapter();
 			
 			for (String item : items) {
