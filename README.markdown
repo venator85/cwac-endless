@@ -106,16 +106,6 @@ it to the `ListAdapter` you used in the constructor. While
 `cacheInBackground()` is called on a background thread,
 `appendCachedData()` is called on the main application thread.
 
-### The Rebinding
-
-Your `EndlessAdapter` also needs to implement `rebindPendingView()`.
-This method will be called, on the UI thread, after `appendInBackground()`
-completes its work. You will be passed the position in the
-`ListAdapter` that needs to go in this row, plus the original row
-`View` itself. Your mission is to make the row `View` look like
-any other row (e.g., replace the "loading" graphic with
-the actual row content).
-
 Dependencies
 ------------
 This project relies upon the [CWAC AdapterWrapper][adapter] project.

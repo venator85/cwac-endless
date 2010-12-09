@@ -56,8 +56,6 @@ import com.commonsware.cwac.adapter.AdapterWrapper;
  */
 abstract public class EndlessAdapter extends AdapterWrapper {
 	abstract protected View getPendingView(ViewGroup parent);
-	abstract protected void rebindPendingView(int position,
-																						View convertView);
 	abstract protected boolean cacheInBackground();
 	abstract protected void appendCachedData();
 	
@@ -86,6 +84,27 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	}
 
 	/**
+	 * Masks ViewType so the AdapterView replaces the "Pending" row when new
+	 * data is loaded.
+	 */
+	public int getItemViewType(int position) {
+		if (position == getWrappedAdapter().getCount())
+			return getViewTypeCount() - 1;
+		
+		return super.getItemViewType(position);
+	}
+
+	/**
+	 * Masks ViewType so the AdapterView replaces the "Pending" row when new
+	 * data is loaded.
+	 * 
+	 * @see #getItemViewType(int)
+	 */
+	public int getViewTypeCount() {
+		return super.getViewTypeCount() + 1;
+	}
+
+	/**
 		* Get a View that displays the data at the specified
 		* position in the data set. In this case, if we are at
 		* the end of the list and we are still in append mode,
@@ -104,17 +123,11 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 			if (pendingView==null) {
 				pendingView=getPendingView(parent);
 				pendingPosition=position;
-				
+
 				new AppendTask().execute();
 			}
-			
+
 			return(pendingView);
-		}
-		else if (convertView==pendingView) {
-			// if we're not at the bottom, and we're getting the
-			// pendingView back for recycling, skip the recycle
-			// process
-			return(super.getView(position, null, parent));
 		}
 		
 		return(super.getView(position, convertView, parent));
@@ -133,11 +146,10 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 			
 			return(null);
 		}
-		
+
 		@Override
 		protected void onPostExecute(Void unused) {
 			appendCachedData();
-			rebindPendingView(pendingPosition, pendingView);
 			pendingView=null;
 			pendingPosition=-1;
 			notifyDataSetChanged();

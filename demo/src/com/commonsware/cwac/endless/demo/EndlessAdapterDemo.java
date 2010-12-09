@@ -82,19 +82,6 @@ public class EndlessAdapterDemo extends ListActivity {
 			return(row);
 		}
 		
-		protected void rebindPendingView(int position, View row) {
-			View child=row.findViewById(android.R.id.text1);
-			
-			child.setVisibility(View.VISIBLE);
-			((TextView)child).setText(getWrappedAdapter()
-																					.getItem(position)
-																					.toString());
-			
-			child=row.findViewById(R.id.throbber);
-			child.setVisibility(View.GONE);
-			child.clearAnimation();
-		}
-		
 		protected boolean cacheInBackground() {
 			SystemClock.sleep(10000);				// pretend to do work
 			
