@@ -69,34 +69,28 @@ it receives a `ViewGroup` parameter and is supposed to return a
 row `View`. The major difference is that this method needs to
 return a row `View` that can serve as a placeholder, indicating
 to the user that you are fetching more data in the background
-(see below). However, this same row `View` must also be able to
-convert in-place to a regular row in your list.
-
-What sort of `View` you return, of course, is up to you. The
-demo application uses a row that, via a `FrameLayout`, has both
-a `TextView` (the normal row content) and an `ImageView` (placeholder)
-overlaying each other. In placeholder mode, only the `ImageView`
-is visible, and it is set to rotate via a `RotateAnimation`. In
-normal mode, only the `TextView` is visible.
+(see below). This `View` is not cached by `EndlessAdapter`, so
+if you wish to reuse it, cache it yourself.
 
 ### The Loading
 
 Your `EndlessAdapter` subclass also needs to implement `cacheInBackground()`.
 This method will be called from a background thread, and it needs
 to download more data that will eventually be added to the `ListAdapter`
-you used in the constructor.
-While the demo application simply sleeps for two seconds, a real
+you used in the constructor. While the demo application simply sleeps for 10 seconds, a real
 application might make a Web service call or otherwise load in
 more data.
 
 This method returns a `boolean`, which needs to be `true` if there
-is more data yet to be fetched, `false` otherwise. Hence, you need
-to make sure that, by the time you return, you know whether or
-not there is more data available.
+is more data yet to be fetched, `false` otherwise.
 
 Since this method is called on a background thread, you do not
 need to fork your own thread. However, at the same time, do not
 try to update the UI directly.
+
+If you expected to be able to retrieve data, but failed (e.g., network
+error), that is fine. However, you should then return `false`, indicating
+that you have no more data.
 
 ### The Attaching
 
@@ -105,6 +99,11 @@ which should take the data cached by `cacheInBackground()` and append
 it to the `ListAdapter` you used in the constructor. While
 `cacheInBackground()` is called on a background thread,
 `appendCachedData()` is called on the main application thread.
+
+If you had a network error in `cacheInBackground()`, simply do nothing
+in `appendCachedData()`. So long as you returned `false` from
+`cacheInBackground()`, `EndlessAdapter` will remove the placeholder
+`View` and will operate as a normal fixed-length list.
 
 Dependencies
 ------------
@@ -115,8 +114,9 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version 0.3.1 of this module, meaning it is pretty darn
-new, but is getting more exercise.
+This is version 0.4 of this module, meaning it is being reused
+by a reasonable number of people, none of whom have burned the
+component's author in effigy (at least to the author's knowledge).
 
 Demo
 ----
@@ -141,6 +141,7 @@ indicate which CWAC module you have questions about.
 
 Release Notes
 -------------
+v0.4.0: eliminated need for `rebindPendingView()`, documented the no-data scenario
 v0.3.1: fixed bug in manifest
 v0.3.0: converted to Android library project, added call to `notifyDataSetChanged()`
 
