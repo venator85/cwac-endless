@@ -30,14 +30,7 @@ import com.commonsware.cwac.adapter.AdapterWrapper;
  *
  * Subclasses need to be able to return, via getPendingView()
  * a row that can serve as both a placeholder while more data
- * is being appended, and then later an actual row in the
- * result set. You might accomplish this via two widgets
- * in a FrameLayout, only one of which is visible (e.g., an
- * ImageView doing a rotation animation while loading new
- * data, then your regular row).
- *
- * Subclasses will be handed that row View back on rebindPendingView()
- * so they can flip back to normal mode.
+ * is being appended.
  *
  * The actual logic for loading new data should be done in
  * appendInBackground(). This method, as the name suggests,
