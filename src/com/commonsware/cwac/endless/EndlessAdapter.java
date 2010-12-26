@@ -84,10 +84,11 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	 * data is loaded.
 	 */
 	public int getItemViewType(int position) {
-		if (position == getWrappedAdapter().getCount())
-			return getViewTypeCount() - 1;
+		if (position==getWrappedAdapter().getCount()) {
+			return(IGNORE_ITEM_VIEW_TYPE);
+		}
 		
-		return super.getItemViewType(position);
+		return(super.getItemViewType(position));
 	}
 
 	/**
@@ -97,7 +98,7 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	 * @see #getItemViewType(int)
 	 */
 	public int getViewTypeCount() {
-		return super.getViewTypeCount() + 1;
+		return(super.getViewTypeCount()+1);
 	}
 
 	/**
