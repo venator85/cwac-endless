@@ -24,33 +24,25 @@ import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import com.commonsware.cwac.endless.EndlessAdapter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class EndlessAdapterDemo extends ListActivity {
-	private static String[] items={"lorem", "ipsum", "dolor",
-																	"sit", "amet", "consectetuer",
-																	"adipiscing", "elit", "morbi",
-																	"vel", "ligula", "vitae",
-																	"arcu", "aliquet", "mollis",
-																	"etiam", "vel", "erat",
-																	"placerat", "ante",
-																	"porttitor", "sodales",
-																	"pellentesque", "augue",
-																	"purus"};
-	
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
 		
-		setListAdapter(new DemoAdapter(new ArrayList<String>(Arrays.asList(items))));
+		ArrayList<Integer> items=new ArrayList<Integer>();
+		
+		for (int i=0;i<25;i++) { items.add(i); }
+		
+		setListAdapter(new DemoAdapter(items));
 	}
 	
 	class DemoAdapter extends EndlessAdapter {
 		private RotateAnimation rotate=null;
 		
-		DemoAdapter(ArrayList<String> list) {
-			super(new ArrayAdapter<String>(EndlessAdapterDemo.this,
+		DemoAdapter(ArrayList<Integer> list) {
+			super(new ArrayAdapter<Integer>(EndlessAdapterDemo.this,
 																			R.layout.row,
 																			android.R.id.text1,
 																			list));
@@ -80,15 +72,15 @@ public class EndlessAdapterDemo extends ListActivity {
 		protected boolean cacheInBackground() {
 			SystemClock.sleep(10000);				// pretend to do work
 			
-			return(getWrappedAdapter().getCount()<60);
+			return(getWrappedAdapter().getCount()<75);
 		}
 		
 		protected void appendCachedData() {
-			@SuppressWarnings("unchecked")
-			ArrayAdapter<String> a=(ArrayAdapter<String>)getWrappedAdapter();
-			
-			for (String item : items) {
-				a.add(item);
+			if (getWrappedAdapter().getCount()<75) {
+				@SuppressWarnings("unchecked")
+				ArrayAdapter<Integer> a=(ArrayAdapter<Integer>)getWrappedAdapter();
+				
+				for (int i=0;i<25;i++) { a.add(a.getCount()); }
 			}
 		}
 	}
