@@ -18,6 +18,7 @@ package com.commonsware.cwac.endless;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.ListAdapter;
 import java.util.concurrent.atomic.AtomicBoolean;
 import com.commonsware.cwac.adapter.AdapterWrapper;
@@ -123,22 +124,49 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	}
 	
 	/**
+		* Called if cacheInBackground() raises a runtime exception,
+		* to allow the UI to deal with the exception on the
+		* main application thread.
+		* @param pendingView View representing the pending row
+		* @param e Exception that was raised by cacheInBackground()
+		* @return true if should allow retrying appending new data, false otherwise
+    */
+	protected boolean onException(View pendingView, Exception e) {
+		Log.e("EndlessAdapter", "Exception in cacheInBackground()", e);
+		
+		return(false);
+	}
+	
+	/**
 	 * A background task that will be run when there is a need
 	 * to append more data. Mostly, this code delegates to the
 	 * subclass, to append the data in the background thread and
 	 * rebind the pending view once that is done.
 	 */
-	class AppendTask extends AsyncTask<Void, Void, Void> {
+	class AppendTask extends AsyncTask<Void, Void, Exception> {
 		@Override
-		protected Void doInBackground(Void... params) {
-			keepOnAppending.set(cacheInBackground());
+		protected Exception doInBackground(Void... params) {
+			Exception result=null;
 			
-			return(null);
+			try {
+				keepOnAppending.set(cacheInBackground());
+			}
+			catch (Exception e) {
+				result=e;
+			}
+			
+			return(result);
 		}
 
 		@Override
-		protected void onPostExecute(Void unused) {
-			appendCachedData();
+		protected void onPostExecute(Exception e) {
+			if (e==null) {
+				appendCachedData();
+			}
+			else {
+				keepOnAppending.set(onException(pendingView, e));
+			}
+			
 			pendingView=null;
 			notifyDataSetChanged();
 		}

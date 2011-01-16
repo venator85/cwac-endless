@@ -103,7 +103,12 @@ it to the `ListAdapter` you used in the constructor. While
 If you had a network error in `cacheInBackground()`, simply do nothing
 in `appendCachedData()`. So long as you returned `false` from
 `cacheInBackground()`, `EndlessAdapter` will remove the placeholder
-`View` and will operate as a normal fixed-length list.
+`View` and will operate as a normal fixed-length list. Or,
+override `onException()` to get control on the main application
+thread and be passed the `Exception` raised by `cacheInBackground()`,
+so you can do something to let the user know what went wrong.
+Have `onException()` return `true` if you want to retry loading data in the background,
+`false` otherwise.
 
 Dependencies
 ------------
@@ -114,9 +119,8 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version 0.4 of this module, meaning it is being reused
-by a reasonable number of people, none of whom have burned the
-component's author in effigy (at least to the author's knowledge).
+This is version v0.5.0 of this module, meaning it is being reused
+more widely, and without tons of anguish.
 
 Demo
 ----
@@ -141,9 +145,10 @@ indicate which CWAC module you have questions about.
 
 Release Notes
 -------------
-v0.4.0: eliminated need for `rebindPendingView()`, documented the no-data scenario
-v0.3.1: fixed bug in manifest
-v0.3.0: converted to Android library project, added call to `notifyDataSetChanged()`
+* v0.5.0: added `onException()`
+* v0.4.0: eliminated need for `rebindPendingView()`, documented the no-data scenario
+* v0.3.1: fixed bug in manifest
+* v0.3.0: converted to Android library project, added call to `notifyDataSetChanged()`
 
 [gg]: http://groups.google.com/group/cw-android
 [adapter]: http://github.com/commonsguy/cwac-adapter/tree/master
