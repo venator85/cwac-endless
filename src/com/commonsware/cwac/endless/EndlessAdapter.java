@@ -190,7 +190,7 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	public View getPendingView(ViewGroup parent) {
 		if(context != null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			return inflater.inflate(pendingResource, null, false);
+			return inflater.inflate(pendingResource, parent, false);
 		}
 		return null;
 	}
