@@ -187,6 +187,11 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 		}
 	}
 
+	/**
+	 * Inflates pending view using the pendingResource ID passed into the constructor
+	 * @param parent
+	 * @return inflated pending view, or null if the context passed into the pending view constructor was null.
+	 */
 	public View getPendingView(ViewGroup parent) {
 		if(context != null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
