@@ -15,7 +15,9 @@
 
 package com.commonsware.cwac.endless;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.util.Log;
@@ -46,18 +48,31 @@ import com.commonsware.cwac.adapter.AdapterWrapper;
  * call to appendInBackground().
  */
 abstract public class EndlessAdapter extends AdapterWrapper {
-	abstract protected View getPendingView(ViewGroup parent);
 	abstract protected boolean cacheInBackground();
 	abstract protected void appendCachedData();
 	
 	private View pendingView=null;
 	private AtomicBoolean keepOnAppending=new AtomicBoolean(true);
+	private Context context;
+	private int pendingResource=-1;
 
 	/**
 		* Constructor wrapping a supplied ListAdapter
     */
 	public EndlessAdapter(ListAdapter wrapped) {
 		super(wrapped);
+	}
+
+	/**
+	 * Constructor wrapping a supplied ListAdapter and providing a id for a pending view.
+	 * @param context
+	 * @param wrapped
+	 * @param pendingResource
+	 */
+	public EndlessAdapter(Context context, ListAdapter wrapped, int pendingResource) {
+		super(wrapped);
+		this.context=context;
+		this.pendingResource=pendingResource;
 	}
 
 	/**
@@ -170,5 +185,20 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 			pendingView=null;
 			notifyDataSetChanged();
 		}
+	}
+
+	/**
+	 * Inflates pending view using the pendingResource ID passed into the constructor
+	 * @param parent
+	 * @return inflated pending view, or null if the context passed into the pending view constructor was null.
+	 */
+	View getPendingView(ViewGroup parent) {
+		if (context!=null) {
+			LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			
+			return(inflater.inflate(pendingResource, parent, false));
+		}
+		
+		throw new RuntimeException("You must either override getPendingView() or supply a pending View resource via the constructor");
 	}
 }

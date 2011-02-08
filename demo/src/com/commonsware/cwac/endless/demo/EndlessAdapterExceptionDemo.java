@@ -19,8 +19,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import com.commonsware.cwac.endless.EndlessAdapter;
 import java.util.ArrayList;
@@ -39,34 +37,13 @@ public class EndlessAdapterExceptionDemo extends ListActivity {
 	}
 	
 	class DemoAdapter extends EndlessAdapter {
-		private RotateAnimation rotate=null;
-		
 		DemoAdapter(ArrayList<Integer> list) {
-			super(new ArrayAdapter<Integer>(EndlessAdapterExceptionDemo.this,
+			super(EndlessAdapterExceptionDemo.this,
+						new ArrayAdapter<Integer>(EndlessAdapterExceptionDemo.this,
 																			R.layout.row,
 																			android.R.id.text1,
-																			list));
-			
-			rotate=new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
-																	0.5f, Animation.RELATIVE_TO_SELF,
-																	0.5f);
-			rotate.setDuration(600);
-			rotate.setRepeatMode(Animation.RESTART);
-			rotate.setRepeatCount(Animation.INFINITE);
-		}
-		
-		protected View getPendingView(ViewGroup parent) {
-			View row=getLayoutInflater().inflate(R.layout.row, null);
-			
-			View child=row.findViewById(android.R.id.text1);
-			
-			child.setVisibility(View.GONE);
-			
-			child=row.findViewById(R.id.throbber);
-			child.setVisibility(View.VISIBLE);
-			child.startAnimation(rotate);
-			
-			return(row);
+																			list),
+						R.layout.pending);
 		}
 		
 		protected boolean cacheInBackground() {
