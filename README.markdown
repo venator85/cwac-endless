@@ -53,7 +53,7 @@ and your users will not perceive a difference.
 
 ### Constructors
 
-`EndlessAdapter` has one constructor, taking a `ListAdapter` as
+`EndlessAdapter` has two constructors. The original one takes a `ListAdapter` as
 a parameter, representing the existing adapter to be made
 endless. Your `EndlessAdapter` subclass will need to override
 this constructor and chain upwards. For example, the DemoAdapter
@@ -61,9 +61,13 @@ inside the demo project takes an `ArrayList<String>` as a
 constructor parameter and wraps it in a `ListAdapter` to supply
 to `EndlessAdapter`.
 
+The second constructor takes a `Context` and resource ID along with
+the `ListAdapter`. These will be used to create the placeholder
+(see below).
+
 ### The Placeholder
 
-Your `EndlessAdapter` subclass needs to implement `getPendingView()`.
+Your `EndlessAdapter` subclass can implement `getPendingView()`.
 This method works a bit like the traditional `getView()`, in that
 it receives a `ViewGroup` parameter and is supposed to return a
 row `View`. The major difference is that this method needs to
@@ -71,6 +75,11 @@ return a row `View` that can serve as a placeholder, indicating
 to the user that you are fetching more data in the background
 (see below). This `View` is not cached by `EndlessAdapter`, so
 if you wish to reuse it, cache it yourself.
+
+If you use the constructor that takes a `Context` and resource ID along with
+the `ListAdapter`, you can skip `getPendingView()`, and `EndlessAdapter`
+will inflate the supplied layout resource as needed to create
+this placeholder.
 
 ### The Loading
 
@@ -145,6 +154,7 @@ indicate which CWAC module you have questions about.
 
 Release Notes
 -------------
+* v0.6.0: added pending `View` support via constructor
 * v0.5.0: added `onException()`
 * v0.4.0: eliminated need for `rebindPendingView()`, documented the no-data scenario
 * v0.3.1: fixed bug in manifest

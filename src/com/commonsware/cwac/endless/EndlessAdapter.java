@@ -54,7 +54,7 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	private View pendingView=null;
 	private AtomicBoolean keepOnAppending=new AtomicBoolean(true);
 	private Context context;
-	private int pendingResource;
+	private int pendingResource=-1;
 
 	/**
 		* Constructor wrapping a supplied ListAdapter
@@ -71,8 +71,8 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	 */
 	public EndlessAdapter(Context context, ListAdapter wrapped, int pendingResource) {
 		super(wrapped);
-		this.context = context;
-		this.pendingResource = pendingResource;
+		this.context=context;
+		this.pendingResource=pendingResource;
 	}
 
 	/**
@@ -187,12 +187,19 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 		}
 	}
 
-	public View getPendingView(ViewGroup parent) {
-		if(context != null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			return inflater.inflate(pendingResource, parent, false);
+	/**
+	 * Inflates pending view using the pendingResource ID passed into the constructor
+	 * @param parent
+	 * @return inflated pending view, or null if the context passed into the pending view constructor was null.
+	 */
+	View getPendingView(ViewGroup parent) {
+		if (context!=null) {
+			LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			
+			return(inflater.inflate(pendingResource, parent, false));
 		}
-		return null;
+		
+		throw new RuntimeException("You must either override getPendingView() or supply a pending View resource via the constructor");
 	}
 
 }
