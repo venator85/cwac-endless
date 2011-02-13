@@ -192,11 +192,10 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 	 * @param parent
 	 * @return inflated pending view, or null if the context passed into the pending view constructor was null.
 	 */
-	View getPendingView(ViewGroup parent) {
-		if (context!=null) {
-			LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-			return(inflater.inflate(pendingResource, parent, false));
+	public View getPendingView(ViewGroup parent) {
+		if(context != null) {
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			return inflater.inflate(pendingResource, parent, false);
 		}
 		
 		throw new RuntimeException("You must either override getPendingView() or supply a pending View resource via the constructor");
