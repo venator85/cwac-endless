@@ -55,6 +55,7 @@ public class EndlessAdapterDemo extends ListActivity {
 			rotate.setRepeatCount(Animation.INFINITE);
 		}
 		
+		@Override
 		protected View getPendingView(ViewGroup parent) {
 			View row=getLayoutInflater().inflate(R.layout.row, null);
 			
@@ -69,12 +70,14 @@ public class EndlessAdapterDemo extends ListActivity {
 			return(row);
 		}
 		
+		@Override
 		protected boolean cacheInBackground() {
 			SystemClock.sleep(10000);				// pretend to do work
 			
 			return(getWrappedAdapter().getCount()<75);
 		}
 		
+		@Override
 		protected void appendCachedData() {
 			if (getWrappedAdapter().getCount()<75) {
 				@SuppressWarnings("unchecked")

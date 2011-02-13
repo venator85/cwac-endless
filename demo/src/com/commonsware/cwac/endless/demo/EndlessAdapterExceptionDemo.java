@@ -46,6 +46,7 @@ public class EndlessAdapterExceptionDemo extends ListActivity {
 						R.layout.pending);
 		}
 		
+		@Override
 		protected boolean cacheInBackground() {
 			SystemClock.sleep(10000);				// pretend to do work
 			
@@ -56,6 +57,7 @@ public class EndlessAdapterExceptionDemo extends ListActivity {
 			throw new RuntimeException("Gadzooks!");
 		}
 		
+		@Override
 		protected void appendCachedData() {
 			if (getWrappedAdapter().getCount()<75) {
 				@SuppressWarnings("unchecked")
