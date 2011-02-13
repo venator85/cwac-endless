@@ -200,5 +200,4 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 		
 		throw new RuntimeException("You must either override getPendingView() or supply a pending View resource via the constructor");
 	}
-
 }
