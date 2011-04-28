@@ -39,22 +39,18 @@ public class EndlessAdapterExceptionDemo extends ListActivity {
 	class DemoAdapter extends EndlessAdapter {
 		DemoAdapter(ArrayList<Integer> list) {
 			super(EndlessAdapterExceptionDemo.this,
-						new ArrayAdapter<Integer>(EndlessAdapterExceptionDemo.this,
-																			R.layout.row,
-																			android.R.id.text1,
-																			list),
-						R.layout.pending);
+						new SpecialAdapter(list), R.layout.pending);
 		}
 		
 		@Override
-		protected boolean cacheInBackground() {
+		protected boolean cacheInBackground() throws Exception {
 			SystemClock.sleep(10000);				// pretend to do work
 			
 			if (getWrappedAdapter().getCount()<75) {
 				return(true);
 			}
 			
-			throw new RuntimeException("Gadzooks!");
+			throw new Exception("Gadzooks!");
 		}
 		
 		@Override
@@ -65,6 +61,23 @@ public class EndlessAdapterExceptionDemo extends ListActivity {
 				
 				for (int i=0;i<25;i++) { a.add(a.getCount()); }
 			}
+		}
+	}
+	
+	class SpecialAdapter extends ArrayAdapter<Integer> {
+		SpecialAdapter(ArrayList<Integer> items) {
+			super(EndlessAdapterExceptionDemo.this, R.layout.row,
+							android.R.id.text1, items);
+		}
+		
+		@Override
+		public View getView(int position, View convertView,
+												ViewGroup parent) {
+			View row=super.getView(position, convertView, parent);
+			
+			// further customize your rows here
+			
+			return(row);
 		}
 	}
 }
