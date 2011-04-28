@@ -48,7 +48,7 @@ import com.commonsware.cwac.adapter.AdapterWrapper;
  * call to appendInBackground().
  */
 abstract public class EndlessAdapter extends AdapterWrapper {
-	abstract protected boolean cacheInBackground();
+	abstract protected boolean cacheInBackground() throws Exception;
 	abstract protected void appendCachedData();
 	
 	private View pendingView=null;
@@ -199,5 +199,13 @@ abstract public class EndlessAdapter extends AdapterWrapper {
 		}
 		
 		throw new RuntimeException("You must either override getPendingView() or supply a pending View resource via the constructor");
+	}
+	
+	/**
+	 * Getter method for the Context being held by the adapter
+	 * @return Context
+	 */
+	protected Context getContext() {
+		return(context);
 	}
 }
