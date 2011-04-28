@@ -128,8 +128,8 @@ ones that you have patched yourself.
 
 Version
 -------
-This is version v0.6.1 of this module, meaning it is being reused
-more widely, and without tons of anguish.
+This is version v0.7.0 of this module, meaning it is slowly
+becoming a respected member of the Android community.
 
 Demo
 ----
@@ -154,6 +154,7 @@ indicate which CWAC module you have questions about.
 
 Release Notes
 -------------
+* v0.7.0: `cacheInBackground()` can now throw checked exceptions, new `getContext()` method available for subclasses
 * v0.6.1: merged bug fix from rgladwell/cwac-endless; added @Override annotations
 * v0.6.0: added pending `View` support via constructor
 * v0.5.0: added `onException()`
