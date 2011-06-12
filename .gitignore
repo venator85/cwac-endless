@@ -4,5 +4,4 @@ gen/
 tests/bin/
 tests/gen/
 tests/local.properties
-/.classpath
-/.project
+res/
